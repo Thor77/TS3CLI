@@ -30,6 +30,13 @@ def server(ctx):
 
 
 @ts3cli.command()
+@click.option('--message', help='global message', required=True)
+@click.pass_context
+def gm(ctx, message):
+    ctx.obj['query'].command('gm', params={'msg': message})
+
+
+@ts3cli.command()
 @click.option('--sid', help='virtual server id', default=1)
 @click.pass_context
 def clients(ctx, sid):
