@@ -29,5 +29,19 @@ def server(ctx):
     )))
 
 
+@ts3cli.command()
+@click.option('--sid', help='virtual server id', default=1)
+@click.pass_context
+def clients(ctx, sid):
+    ctx.obj['query'].command('use', params={'sid': sid})
+    click.echo(list(map(
+        itemgetter('client_nickname'),
+        filter(
+            lambda c: c['client_type'] == 0,
+            ctx.obj['query'].command('clientlist')
+        )
+    )))
+
+
 if __name__ == '__main__':
     ts3cli()
