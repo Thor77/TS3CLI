@@ -24,7 +24,7 @@ def ts3cli(ctx, host, port, username, password):
 @click.pass_context
 def server(ctx):
     click.echo(list(map(
-        itemgetter('virtualserver_name'),
+        lambda vs: '{virtualserver_name} ({virtualserver_id})'.format(**vs),
         ctx.obj['query'].command('serverlist')
     )))
 
