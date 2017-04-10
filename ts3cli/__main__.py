@@ -1,5 +1,3 @@
-from operator import itemgetter
-
 import click
 from ts3py import TS3Query
 
@@ -43,7 +41,7 @@ def gm(ctx, message):
 def clients(ctx, sid):
     ctx.obj['query'].command('use', params={'sid': sid})
     click.echo(', '.join(map(
-        itemgetter('client_nickname'),
+        lambda client: '{client_nickname} ({clid})'.format(**client),
         filter(
             lambda c: c['client_type'] == 0,
             ctx.obj['query'].command('clientlist')
