@@ -1,6 +1,8 @@
 import click
 from ts3py import TS3Query
 
+sid_option = click.option('--sid', help='virtual server id', default=1)
+
 
 @click.group()
 @click.option('--host', help='teamspeak query host', required=True)
@@ -36,7 +38,7 @@ def gm(ctx, message):
 
 
 @ts3cli.command()
-@click.option('--sid', help='virtual server id', default=1)
+@sid_option
 @click.pass_context
 def clients(ctx, sid):
     ctx.obj['query'].command('use', params={'sid': sid})
@@ -47,6 +49,27 @@ def clients(ctx, sid):
             ctx.obj['query'].command('clientlist')
         )
     )))
+
+
+@ts3cli.command()
+@sid_option
+@click.option('--clid', help='client id')
+@click.pass_context
+def client(ctx, sid, clid):
+    ctx.obj['query'].command('use', params={'sid': sid})
+    click.echo(
+        '''Nickname: {client_nickname}
+Description: {client_description}
+ID: {clid}
+Database ID: {client_database_id}
+Unique Identifier: {client_unique_identifier}
+Version/Platform: {client_version} on {client_platform}
+IP: {connection_client_ip}
+Country: {client_country}'''.format(
+            **ctx.obj['query'].command('clientinfo', params={'clid': clid})[0],
+            clid=clid
+        )
+    )
 
 
 if __name__ == '__main__':
