@@ -5,10 +5,9 @@ sid_option = click.option('--sid', help='virtual server id', default=1)
 
 
 @click.group()
-@click.option('--host', help='teamspeak query host', required=True)
+@click.option('--host', help='teamspeak query host', default='localhost')
 @click.option(
     '--port', type=int, help='teamspeak query port', default=10011,
-    required=True
 )
 @click.option('--username', help='query username', required=True)
 @click.option('--password', help='query password', required=True)
