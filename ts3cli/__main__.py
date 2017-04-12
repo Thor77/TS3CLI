@@ -22,6 +22,9 @@ def ts3cli(ctx, host, port, username, password):
 @ts3cli.command()
 @click.pass_context
 def server(ctx):
+    '''
+    List virtual servers
+    '''
     click.echo(', '.join(map(
         lambda vs: '{virtualserver_name} ({virtualserver_id}) - '
         '{virtualserver_clientsonline} clients online'.format(**vs),
@@ -33,6 +36,9 @@ def server(ctx):
 @click.option('--message', help='global message', required=True)
 @click.pass_context
 def gm(ctx, message):
+    '''
+    Send a global message
+    '''
     ctx.obj['query'].command('gm', params={'msg': message})
 
 
@@ -40,6 +46,9 @@ def gm(ctx, message):
 @sid_option
 @click.pass_context
 def clients(ctx, sid):
+    '''
+    List clients on a virtual server
+    '''
     ctx.obj['query'].command('use', params={'sid': sid})
     click.echo(', '.join(map(
         lambda client: '{client_nickname} ({clid})'.format(**client),
@@ -55,6 +64,9 @@ def clients(ctx, sid):
 @click.option('--clid', help='client id')
 @click.pass_context
 def client(ctx, sid, clid):
+    '''
+    View detailed information about a client
+    '''
     ctx.obj['query'].command('use', params={'sid': sid})
     click.echo(
         '''Nickname: {client_nickname}
