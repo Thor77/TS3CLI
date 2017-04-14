@@ -3,6 +3,7 @@ from ts3py import TS3Query
 
 sid_option = click.option('--sid', help='virtual server id', default=1)
 clid_option = click.option('--clid', help='client id', required=True)
+msg_option = click.option('--msg', help='message', required=True)
 
 
 @click.group()
@@ -34,13 +35,13 @@ def server(ctx):
 
 
 @ts3cli.command()
-@click.option('--message', help='global message', required=True)
+@msg_option
 @click.pass_context
-def gm(ctx, message):
+def gm(ctx, msg):
     '''
     Send a global message
     '''
-    ctx.obj['query'].command('gm', params={'msg': message})
+    ctx.obj['query'].command('gm', params={'msg': msg})
 
 
 @ts3cli.command()
@@ -87,7 +88,7 @@ Country: {client_country}'''.format(
 @ts3cli.command()
 @sid_option
 @clid_option
-@click.option('--msg', help='message', required=True)
+@msg_option
 @click.pass_context
 def poke(ctx, sid, clid, msg):
     '''
