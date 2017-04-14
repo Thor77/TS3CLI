@@ -2,6 +2,7 @@ import click
 from ts3py import TS3Query
 
 sid_option = click.option('--sid', help='virtual server id', default=1)
+clid_option = click.option('--clid', help='client id', required=True)
 
 
 @click.group()
@@ -61,7 +62,7 @@ def clients(ctx, sid):
 
 @ts3cli.command()
 @sid_option
-@click.option('--clid', help='client id')
+@clid_option
 @click.pass_context
 def client(ctx, sid, clid):
     '''
@@ -81,6 +82,19 @@ Country: {client_country}'''.format(
             clid=clid
         )
     )
+
+
+@ts3cli.command()
+@sid_option
+@clid_option
+@click.option('--msg', help='message', required=True)
+@click.pass_context
+def poke(ctx, sid, clid, msg):
+    '''
+    Poke a client
+    '''
+    ctx.obj['query'].command('use', params={'sid': sid})
+    ctx.obj['query'].command('clientpoke', params={'clid': clid, 'msg': msg})
 
 
 if __name__ == '__main__':
