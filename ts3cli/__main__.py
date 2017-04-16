@@ -98,5 +98,27 @@ def poke(ctx, sid, clid, msg):
     ctx.obj['query'].command('clientpoke', params={'clid': clid, 'msg': msg})
 
 
+@ts3cli.command()
+@sid_option
+@clid_option
+@click.option('--reason', help='kick reason')
+@click.option(
+    '--channel', help='kick from channel', is_flag=True, default=False
+)
+@click.pass_context
+def kick(ctx, sid, clid, reason, channel):
+    '''
+    Kick a client
+    '''
+    ctx.obj['query'].command('use', params={'sid': sid})
+    params = {
+        'clid': clid,
+        'reasonid': 4 if channel else 5
+    }
+    if reason:
+        params['reasonmsg'] = reason
+    ctx.obj['query'].command('clientkick', params=params)
+
+
 if __name__ == '__main__':
     ts3cli()
