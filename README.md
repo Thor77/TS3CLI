@@ -3,6 +3,11 @@ TS3CLI
 
 A CLI for the Teamspeak3 query interface for easy server administration.
 
+Installation
+============
+* Clone this repo and `python setup.py install`
+* Install from PyPi `pip install ts3cli`
+
 Usage
 =====
 ´´´
