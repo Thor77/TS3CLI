@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 import click
 from ts3py import TS3Query
 
@@ -70,6 +72,8 @@ def client(ctx, sid, clid):
     View detailed information about a client
     '''
     ctx.obj['query'].command('use', params={'sid': sid})
+    client_info = ctx.obj['query'].command(
+        'clientinfo', params={'clid': clid})[0]
     click.echo(
         '''Nickname: {client_nickname}
 Description: {client_description}
@@ -78,9 +82,10 @@ Database ID: {client_database_id}
 Unique Identifier: {client_unique_identifier}
 Version/Platform: {client_version} on {client_platform}
 IP: {connection_client_ip}
-Country: {client_country}'''.format(
-            **ctx.obj['query'].command('clientinfo', params={'clid': clid})[0],
-            clid=clid
+Country: {client_country}
+Connection time: {connection_time}'''.format(
+            **client_info, clid=clid, connection_time=timedelta(
+                milliseconds=client_info['connection_connected_time'])
         )
     )
 
