@@ -23,6 +23,13 @@ def ts3cli(ctx, host, port, username, password):
     ctx.obj['query'] = query
 
 
+@ts3cli.resultcallback()
+@click.pass_context
+def disconnect(ctx, result, **kwargs):
+    # disconnect from query
+    ctx.obj['query'].command('quit')
+
+
 @ts3cli.command()
 @click.pass_context
 def server(ctx):
