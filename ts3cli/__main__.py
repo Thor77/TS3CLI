@@ -4,6 +4,7 @@ import click
 from ts3py import TS3Query
 
 sid_option = click.option('--sid', help='virtual server id', default=1)
+cid_option = click.option('--cid', help='channel id', required=True)
 clid_option = click.option('--clid', help='client id', required=True)
 msg_option = click.option('--msg', help='message', required=True)
 
@@ -113,6 +114,46 @@ def channel(ctx, sid):
         ),
         ctx.obj['query'].command('channellist')
     )))
+
+
+@ts3cli.command()
+@sid_option
+@cid_option
+@click.pass_context
+def channelinfo(ctx, sid, cid):
+    '''
+    View detailed information about a channel
+    '''
+    ctx.obj['query'].command('use', params={'sid': sid})
+    channel_info = ctx.obj['query'].command(
+        'channelinfo', params={'cid': cid})[0]
+    click.echo(channel_info)
+    click.echo(
+        '''Name: {channel_name}
+Topic: {channel_topic}
+Description: {channel_description}
+Password: {password}
+Type: {type}
+Max clients: {maxclients}
+Filepath: {channel_filepath}
+Icon: {channel_icon_id}
+'''.format(
+            **channel_info,
+            password='yes' if channel_info['channel_password'] else 'no',
+            maxclients=(
+                '∞' if channel_info['channel_maxclients'] == -1
+                else channel_info['channel_maxclients']
+            ),
+            type=list(filter(lambda t: t[1], [
+                ('permanent', channel_info['channel_flag_permanent']),
+                (
+                    'semi_permanent',
+                    channel_info['channel_flag_semi_permanent']
+                ),
+                ('temporary', 1)
+            ]))[0][0]
+        )
+    )
 
 
 @ts3cli.command()
