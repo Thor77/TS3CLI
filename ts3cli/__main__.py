@@ -99,6 +99,24 @@ Connection time: {connection_time}'''.format(
 
 @ts3cli.command()
 @sid_option
+@click.pass_context
+def channel(ctx, sid):
+    '''
+    List channel on a virtual server
+    '''
+    ctx.obj['query'].command('use', params={'sid': sid})
+    click.echo(', '.join(map(
+        lambda channel: '{channel_name} ({cid}){clients}'.format(
+            **channel,
+            clients=' - {} clients'.format(channel['total_clients'])
+                    if channel['total_clients'] >= 1 else ''
+        ),
+        ctx.obj['query'].command('channellist')
+    )))
+
+
+@ts3cli.command()
+@sid_option
 @clid_option
 @msg_option
 @click.pass_context
