@@ -74,7 +74,7 @@ def clients(ctx, sid):
 @sid_option
 @clid_option
 @click.pass_context
-def client(ctx, sid, clid):
+def clientinfo(ctx, sid, clid):
     '''
     View detailed information about a client
     '''
