@@ -212,5 +212,26 @@ def ban(ctx, sid, clid, duration, reason):
     ctx.obj['query'].command('banclient', params=params)
 
 
+@ts3cli.command()
+@sid_option
+@click.pass_context
+def banlist(ctx, sid):
+    ctx.obj['query'].command('use', params={'sid': sid})
+    click.echo(', '.join(map(
+        lambda ban: '{identifier} ({banid})'.format(
+            **ban,
+            identifier=ban['ip'] if ban['ip']
+                    else '{nickname}{uid}'.format(
+                        **ban,
+                        nickname=(
+                            ban['lastnickname'] + '/'
+                            if ban['lastnickname'] else ''
+                        )
+                    )
+        ),
+        ctx.obj['query'].command('banlist')
+    )))
+
+
 if __name__ == '__main__':
     ts3cli()
