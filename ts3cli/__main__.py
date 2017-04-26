@@ -233,5 +233,17 @@ def banlist(ctx, sid):
     )))
 
 
+@ts3cli.command()
+@sid_option
+@click.option('--banid', help='ban id', required=True)
+@click.pass_context
+def bandel(ctx, sid, banid):
+    '''
+    Remove a ban
+    '''
+    ctx.obj['query'].command('use', params={'sid': sid})
+    ctx.obj['query'].command('bandel', params={'banid': banid})
+
+
 if __name__ == '__main__':
     ts3cli()
