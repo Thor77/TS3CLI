@@ -201,6 +201,9 @@ def kick(ctx, sid, clid, reason, channel):
 @click.option('--reason', help='ban reason')
 @click.pass_context
 def ban(ctx, sid, clid, duration, reason):
+    '''
+    Ban a client
+    '''
     ctx.obj['query'].command('use', params={'sid': sid})
     params = {
         'clid': clid
@@ -216,6 +219,9 @@ def ban(ctx, sid, clid, duration, reason):
 @sid_option
 @click.pass_context
 def banlist(ctx, sid):
+    '''
+    List bans
+    '''
     ctx.obj['query'].command('use', params={'sid': sid})
     click.echo(', '.join(map(
         lambda ban: '{identifier} ({banid})'.format(
