@@ -191,5 +191,26 @@ def kick(ctx, sid, clid, reason, channel):
     ctx.obj['query'].command('clientkick', params=params)
 
 
+@ts3cli.command()
+@sid_option
+@clid_option
+@click.option(
+    '--duration',
+    type=int, help='ban duration in seconds (if not given permanent)'
+)
+@click.option('--reason', help='ban reason')
+@click.pass_context
+def ban(ctx, sid, clid, duration, reason):
+    ctx.obj['query'].command('use', params={'sid': sid})
+    params = {
+        'clid': clid
+    }
+    if duration:
+        params['time'] = duration
+    if reason:
+        params['banreason'] = reason
+    ctx.obj['query'].command('banclient', params=params)
+
+
 if __name__ == '__main__':
     ts3cli()
