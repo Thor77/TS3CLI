@@ -3,10 +3,7 @@ from datetime import timedelta
 import click
 from ts3py import TS3Query
 
-sid_option = click.option('--sid', help='virtual server id', default=1)
-cid_option = click.option('--cid', help='channel id', required=True)
-clid_option = click.option('--clid', help='client id', required=True)
-msg_option = click.option('--msg', help='message', required=True)
+from .utils import sid_option, cid_option, clid_option, msg_option
 
 
 @click.group()
