@@ -124,7 +124,6 @@ def channelinfo(ctx, sid, cid):
     ctx.obj['query'].command('use', params={'sid': sid})
     channel_info = ctx.obj['query'].command(
         'channelinfo', params={'cid': cid})[0]
-    click.echo(channel_info)
     click.echo(
         '''Name: {channel_name}
 Topic: {channel_topic}
