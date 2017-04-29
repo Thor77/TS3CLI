@@ -1,9 +1,10 @@
 from datetime import timedelta
 
 import click
+
 from ts3py import TS3Query
 
-from .utils import sid_option, cid_option, clid_option, msg_option
+from .utils import cid_option, clid_option, msg_option, sid_option
 
 
 @click.group()
