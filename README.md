@@ -1,4 +1,4 @@
-TS3CLI
+TS3CLI [![Build Status](https://travis-ci.org/Thor77/TS3CLI.svg?branch=master)](https://travis-ci.org/Thor77/TS3CLI)
 ======
 
 A CLI for the Teamspeak3 query interface for easy server administration.
