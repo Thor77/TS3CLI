@@ -4,7 +4,8 @@ import click
 
 from ts3py import TS3Query
 
-from .utils import cid_option, clid_option, msg_option, sid_option
+from .utils import (cid_option, clid_option, count_to_str, msg_option,
+                    sid_option)
 
 
 @click.group()
@@ -37,7 +38,12 @@ def server(ctx):
     '''
     click.echo(', '.join(map(
         lambda vs: '{virtualserver_name} ({virtualserver_id}) - '
-        '{virtualserver_clientsonline} clients online'.format(**vs),
+        '{clientsonline}'.format(
+            clientsonline=count_to_str(
+                vs['virtualserver_clientsonline'], 'client'
+            ) + ' online',
+            **vs
+        ),
         ctx.obj['query'].command('serverlist')
     )))
 
@@ -107,8 +113,9 @@ def channel(ctx, sid):
     click.echo(', '.join(map(
         lambda channel: '{channel_name} ({cid}){clients}'.format(
             **channel,
-            clients=' - {} clients'.format(channel['total_clients'])
-                    if channel['total_clients'] >= 1 else ''
+            clients=' - {}'.format(
+                count_to_str(channel['total_clients'], 'client')
+            ) if channel['total_clients'] >= 1 else ''
         ),
         ctx.obj['query'].command('channellist')
     )))
