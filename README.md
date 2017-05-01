@@ -10,7 +10,7 @@ Installation
 
 Usage
 =====
-´´´
+```
 Usage: ts3cli [OPTIONS] COMMAND [ARGS]...
 
 Options:
@@ -26,4 +26,4 @@ Commands:
   gm       Send a global message
   poke     Poke a client
   server   List virtual servers
-´´´
+```
