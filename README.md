@@ -1,4 +1,4 @@
-TS3CLI [![Build Status](https://travis-ci.org/Thor77/TS3CLI.svg?branch=master)](https://travis-ci.org/Thor77/TS3CLI)
+TS3CLI [![Build Status](https://travis-ci.org/Thor77/TS3CLI.svg?branch=master)](https://travis-ci.org/Thor77/TS3CLI) [![PyPI](https://img.shields.io/pypi/v/ts3cli.svg)](https://pypi.python.org/pypi/ts3cli)
 ======
 
 A CLI for the Teamspeak3 query interface for easy server administration.
