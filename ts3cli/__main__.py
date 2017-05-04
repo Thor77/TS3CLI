@@ -4,7 +4,7 @@ import click
 from ts3py import TS3Query
 
 from .utils import (cid_option, clid_option, count_to_str, msg_option,
-                    pass_query, sid_option)
+                    pass_query, sid_option, use)
 
 
 @click.group()
@@ -63,7 +63,7 @@ def clients(query, sid):
     '''
     List clients on a virtual server
     '''
-    query.command('use', params={'sid': sid})
+    use(query, sid)
     click.echo(', '.join(map(
         lambda client: '{client_nickname} ({clid})'.format(**client),
         filter(
@@ -81,7 +81,7 @@ def clientinfo(query, sid, clid):
     '''
     View detailed information about a client
     '''
-    query.command('use', params={'sid': sid})
+    use(query, sid)
     client_info = query.command(
         'clientinfo', params={'clid': clid})[0]
     click.echo(
@@ -107,7 +107,7 @@ def channel(query, sid):
     '''
     List channel on a virtual server
     '''
-    query.command('use', params={'sid': sid})
+    use(query, sid)
     click.echo(', '.join(map(
         lambda channel: '{channel_name} ({cid}){clients}'.format(
             **channel,
@@ -127,7 +127,7 @@ def channelinfo(query, sid, cid):
     '''
     View detailed information about a channel
     '''
-    query.command('use', params={'sid': sid})
+    use(query, sid)
     channel_info = query.command(
         'channelinfo', params={'cid': cid})[0]
     click.echo(
@@ -167,7 +167,7 @@ def poke(query, sid, clid, msg):
     '''
     Poke a client
     '''
-    query.command('use', params={'sid': sid})
+    use(query, sid)
     query.command('clientpoke', params={'clid': clid, 'msg': msg})
 
 
@@ -183,7 +183,7 @@ def kick(query, sid, clid, reason, channel):
     '''
     Kick a client
     '''
-    query.command('use', params={'sid': sid})
+    use(query, sid)
     params = {
         'clid': clid,
         'reasonid': 4 if channel else 5
@@ -206,7 +206,7 @@ def ban(query, sid, clid, duration, reason):
     '''
     Ban a client
     '''
-    query.command('use', params={'sid': sid})
+    use(query, sid)
     params = {
         'clid': clid
     }
@@ -224,7 +224,7 @@ def banlist(query, sid):
     '''
     List bans
     '''
-    query.command('use', params={'sid': sid})
+    use(query, sid)
     click.echo(', '.join(map(
         lambda ban: '{identifier} ({banid})'.format(
             **ban,
@@ -249,7 +249,7 @@ def bandel(query, sid, banid):
     '''
     Remove a ban
     '''
-    query.command('use', params={'sid': sid})
+    use(query, sid)
     query.command('bandel', params={'banid': banid})
 
 

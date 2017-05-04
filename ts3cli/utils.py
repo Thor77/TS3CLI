@@ -10,6 +10,13 @@ clid_option = click.option('--clid', help='client id', required=True)
 msg_option = click.option('--msg', help='message', required=True)
 
 
+def use(query, sid):
+    '''
+    Shortcut for calling "use" on the query-object
+    '''
+    query.command('use', params={'sid': sid})
+
+
 def count_to_str(count, word):
     '''
     Merge count and word with (or without) plural ending
