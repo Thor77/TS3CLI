@@ -1,5 +1,9 @@
 import click
 
+from ts3py import TS3Query
+
+pass_query = click.make_pass_decorator(TS3Query)
+
 sid_option = click.option('--sid', help='virtual server id', default=1)
 cid_option = click.option('--cid', help='channel id', required=True)
 clid_option = click.option('--clid', help='client id', required=True)

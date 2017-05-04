@@ -1,11 +1,10 @@
 from datetime import timedelta
 
 import click
-
 from ts3py import TS3Query
 
 from .utils import (cid_option, clid_option, count_to_str, msg_option,
-                    sid_option)
+                    pass_query, sid_option)
 
 
 @click.group()
@@ -19,20 +18,19 @@ from .utils import (cid_option, clid_option, count_to_str, msg_option,
 def ts3cli(ctx, host, port, username, password):
     query = TS3Query(host, port)
     query.login(username, password)
-    ctx.obj = {}
-    ctx.obj['query'] = query
+    ctx.obj = query
 
 
 @ts3cli.resultcallback()
-@click.pass_context
-def disconnect(ctx, result, **kwargs):
+@pass_query
+def disconnect(query, *args, **kwargs):
     # disconnect from query
-    ctx.obj['query'].command('quit')
+    query.command('quit')
 
 
 @ts3cli.command()
-@click.pass_context
-def server(ctx):
+@pass_query
+def server(query):
     '''
     List virtual servers
     '''
@@ -44,33 +42,33 @@ def server(ctx):
             ) + ' online',
             **vs
         ),
-        ctx.obj['query'].command('serverlist')
+        query.command('serverlist')
     )))
 
 
 @ts3cli.command()
 @msg_option
-@click.pass_context
-def gm(ctx, msg):
+@pass_query
+def gm(query, msg):
     '''
     Send a global message
     '''
-    ctx.obj['query'].command('gm', params={'msg': msg})
+    query.command('gm', params={'msg': msg})
 
 
 @ts3cli.command()
 @sid_option
-@click.pass_context
-def clients(ctx, sid):
+@pass_query
+def clients(query, sid):
     '''
     List clients on a virtual server
     '''
-    ctx.obj['query'].command('use', params={'sid': sid})
+    query.command('use', params={'sid': sid})
     click.echo(', '.join(map(
         lambda client: '{client_nickname} ({clid})'.format(**client),
         filter(
             lambda c: c['client_type'] == 0,
-            ctx.obj['query'].command('clientlist')
+            query.command('clientlist')
         )
     )))
 
@@ -78,13 +76,13 @@ def clients(ctx, sid):
 @ts3cli.command()
 @sid_option
 @clid_option
-@click.pass_context
-def clientinfo(ctx, sid, clid):
+@pass_query
+def clientinfo(query, sid, clid):
     '''
     View detailed information about a client
     '''
-    ctx.obj['query'].command('use', params={'sid': sid})
-    client_info = ctx.obj['query'].command(
+    query.command('use', params={'sid': sid})
+    client_info = query.command(
         'clientinfo', params={'clid': clid})[0]
     click.echo(
         '''Nickname: {client_nickname}
@@ -104,12 +102,12 @@ Connection time: {connection_time}'''.format(
 
 @ts3cli.command()
 @sid_option
-@click.pass_context
-def channel(ctx, sid):
+@pass_query
+def channel(query, sid):
     '''
     List channel on a virtual server
     '''
-    ctx.obj['query'].command('use', params={'sid': sid})
+    query.command('use', params={'sid': sid})
     click.echo(', '.join(map(
         lambda channel: '{channel_name} ({cid}){clients}'.format(
             **channel,
@@ -117,20 +115,20 @@ def channel(ctx, sid):
                 count_to_str(channel['total_clients'], 'client')
             ) if channel['total_clients'] >= 1 else ''
         ),
-        ctx.obj['query'].command('channellist')
+        query.command('channellist')
     )))
 
 
 @ts3cli.command()
 @sid_option
 @cid_option
-@click.pass_context
-def channelinfo(ctx, sid, cid):
+@pass_query
+def channelinfo(query, sid, cid):
     '''
     View detailed information about a channel
     '''
-    ctx.obj['query'].command('use', params={'sid': sid})
-    channel_info = ctx.obj['query'].command(
+    query.command('use', params={'sid': sid})
+    channel_info = query.command(
         'channelinfo', params={'cid': cid})[0]
     click.echo(
         '''Name: {channel_name}
@@ -164,13 +162,13 @@ Icon: {channel_icon_id}
 @sid_option
 @clid_option
 @msg_option
-@click.pass_context
-def poke(ctx, sid, clid, msg):
+@pass_query
+def poke(query, sid, clid, msg):
     '''
     Poke a client
     '''
-    ctx.obj['query'].command('use', params={'sid': sid})
-    ctx.obj['query'].command('clientpoke', params={'clid': clid, 'msg': msg})
+    query.command('use', params={'sid': sid})
+    query.command('clientpoke', params={'clid': clid, 'msg': msg})
 
 
 @ts3cli.command()
@@ -180,19 +178,19 @@ def poke(ctx, sid, clid, msg):
 @click.option(
     '--channel', help='kick from channel', is_flag=True, default=False
 )
-@click.pass_context
-def kick(ctx, sid, clid, reason, channel):
+@pass_query
+def kick(query, sid, clid, reason, channel):
     '''
     Kick a client
     '''
-    ctx.obj['query'].command('use', params={'sid': sid})
+    query.command('use', params={'sid': sid})
     params = {
         'clid': clid,
         'reasonid': 4 if channel else 5
     }
     if reason:
         params['reasonmsg'] = reason
-    ctx.obj['query'].command('clientkick', params=params)
+    query.command('clientkick', params=params)
 
 
 @ts3cli.command()
@@ -203,12 +201,12 @@ def kick(ctx, sid, clid, reason, channel):
     type=int, help='ban duration in seconds (if not given permanent)'
 )
 @click.option('--reason', help='ban reason')
-@click.pass_context
-def ban(ctx, sid, clid, duration, reason):
+@pass_query
+def ban(query, sid, clid, duration, reason):
     '''
     Ban a client
     '''
-    ctx.obj['query'].command('use', params={'sid': sid})
+    query.command('use', params={'sid': sid})
     params = {
         'clid': clid
     }
@@ -216,17 +214,17 @@ def ban(ctx, sid, clid, duration, reason):
         params['time'] = duration
     if reason:
         params['banreason'] = reason
-    ctx.obj['query'].command('banclient', params=params)
+    query.command('banclient', params=params)
 
 
 @ts3cli.command()
 @sid_option
-@click.pass_context
-def banlist(ctx, sid):
+@pass_query
+def banlist(query, sid):
     '''
     List bans
     '''
-    ctx.obj['query'].command('use', params={'sid': sid})
+    query.command('use', params={'sid': sid})
     click.echo(', '.join(map(
         lambda ban: '{identifier} ({banid})'.format(
             **ban,
@@ -239,20 +237,20 @@ def banlist(ctx, sid):
                         )
                     )
         ),
-        ctx.obj['query'].command('banlist')
+        query.command('banlist')
     )))
 
 
 @ts3cli.command()
 @sid_option
 @click.option('--banid', help='ban id', required=True)
-@click.pass_context
-def bandel(ctx, sid, banid):
+@pass_query
+def bandel(query, sid, banid):
     '''
     Remove a ban
     '''
-    ctx.obj['query'].command('use', params={'sid': sid})
-    ctx.obj['query'].command('bandel', params={'banid': banid})
+    query.command('use', params={'sid': sid})
+    query.command('bandel', params={'banid': banid})
 
 
 if __name__ == '__main__':
