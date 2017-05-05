@@ -93,7 +93,8 @@ Unique Identifier: {client_unique_identifier}
 Version/Platform: {client_version} on {client_platform}
 IP: {connection_client_ip}
 Country: {client_country}
-Connection time: {connection_time}'''.format(
+Connection time: {connection_time}
+Channel (ID): {cid}'''.format(
             **client_info, clid=clid, connection_time=timedelta(
                 milliseconds=client_info['connection_connected_time'])
         )
