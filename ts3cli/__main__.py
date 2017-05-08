@@ -95,8 +95,9 @@ IP: {connection_client_ip}
 Country: {client_country}
 Connection time: {connection_time}
 Channel (ID): {cid}'''.format(
-            **client_info, clid=clid, connection_time=timedelta(
-                milliseconds=client_info['connection_connected_time'])
+            clid=clid, connection_time=timedelta(
+                milliseconds=client_info['connection_connected_time']),
+            **client_info
         )
     )
 
@@ -111,10 +112,10 @@ def channel(query, sid):
     use(query, sid)
     click.echo(', '.join(map(
         lambda channel: '{channel_name} ({cid}){clients}'.format(
-            **channel,
             clients=' - {}'.format(
                 count_to_str(channel['total_clients'], 'client')
-            ) if channel['total_clients'] >= 1 else ''
+            ) if channel['total_clients'] >= 1 else '',
+            **channel
         ),
         query.command('channellist')
     )))
@@ -141,7 +142,6 @@ Max clients: {maxclients}
 Filepath: {channel_filepath}
 Icon: {channel_icon_id}
 '''.format(
-            **channel_info,
             password='yes' if channel_info['channel_password'] else 'no',
             maxclients=(
                 '∞' if channel_info['channel_maxclients'] == -1
@@ -154,7 +154,8 @@ Icon: {channel_icon_id}
                     channel_info['channel_flag_semi_permanent']
                 ),
                 ('temporary', 1)
-            ]))[0][0]
+            ]))[0][0],
+            **channel_info
         )
     )
 
@@ -228,15 +229,15 @@ def banlist(query, sid):
     use(query, sid)
     click.echo(', '.join(map(
         lambda ban: '{identifier} ({banid})'.format(
-            **ban,
             identifier=ban['ip'] if ban['ip']
                     else '{nickname}{uid}'.format(
-                        **ban,
                         nickname=(
                             ban['lastnickname'] + '/'
                             if ban['lastnickname'] else ''
-                        )
-                    )
+                        ),
+                        **ban
+                    ),
+            **ban
         ),
         query.command('banlist')
     )))
