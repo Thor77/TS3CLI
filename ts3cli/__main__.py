@@ -36,8 +36,8 @@ def server(query):
     List virtual servers
     '''
     click.echo(', '.join(map(
-        lambda vs: '{virtualserver_name} ({virtualserver_id}) - '
-        '{clientsonline}'.format(
+        lambda vs: u'{virtualserver_name} ({virtualserver_id}) - '
+        u'{clientsonline}'.format(
             clientsonline=count_to_str(
                 vs['virtualserver_clientsonline'], 'client'
             ) + ' online',
@@ -66,7 +66,7 @@ def clients(query, sid):
     '''
     use(query, sid)
     click.echo(', '.join(map(
-        lambda client: '{client_nickname} ({clid})'.format(**client),
+        lambda client: u'{client_nickname} ({clid})'.format(**client),
         filter(
             lambda c: c['client_type'] == 0,
             query.command('clientlist')
@@ -86,7 +86,7 @@ def clientinfo(query, sid, clid):
     client_info = query.command(
         'clientinfo', params={'clid': clid})[0]
     click.echo(
-        '''Nickname: {client_nickname}
+        u'''Nickname: {client_nickname}
 Description: {client_description}
 ID: {clid}
 Database ID: {client_database_id}
@@ -112,7 +112,7 @@ def channel(query, sid):
     '''
     use(query, sid)
     click.echo(', '.join(map(
-        lambda channel: '{channel_name} ({cid}){clients}'.format(
+        lambda channel: u'{channel_name} ({cid}){clients}'.format(
             clients=' - {}'.format(
                 count_to_str(channel['total_clients'], 'client')
             ) if channel['total_clients'] >= 1 else '',
@@ -134,7 +134,7 @@ def channelinfo(query, sid, cid):
     channel_info = query.command(
         'channelinfo', params={'cid': cid})[0]
     click.echo(
-        '''Name: {channel_name}
+        u'''Name: {channel_name}
 Topic: {channel_topic}
 Description: {channel_description}
 Password: {password}
@@ -231,7 +231,7 @@ def banlist(query, sid):
     click.echo(', '.join(map(
         lambda ban: '{identifier} ({banid})'.format(
             identifier=ban['ip'] if ban['ip']
-                    else '{nickname}{uid}'.format(
+                    else u'{nickname}{uid}'.format(
                         nickname=(
                             ban['lastnickname'] + '/'
                             if ban['lastnickname'] else ''
