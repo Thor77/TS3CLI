@@ -133,6 +133,9 @@ def channelinfo(query, sid, cid):
     use(query, sid)
     channel_info = query.command(
         'channelinfo', params={'cid': cid})[0]
+    parent = query.command(
+        'channelinfo', params={'cid': channel_info['pid']}
+    )[0]['channel_name'] if 'pid' in channel_info else None
     click.echo(
         u'''Name: {channel_name}
 Topic: {channel_topic}
@@ -142,6 +145,7 @@ Type: {type}
 Max clients: {maxclients}
 Filepath: {channel_filepath}
 Icon: {channel_icon_id}
+Parent: {parent}
 '''.format(
             password='yes' if channel_info['channel_password'] else 'no',
             maxclients=(
@@ -156,6 +160,7 @@ Icon: {channel_icon_id}
                 ),
                 ('temporary', 1)
             ]))[0][0],
+            parent=parent,
             **channel_info
         )
     )
