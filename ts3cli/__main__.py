@@ -310,5 +310,18 @@ def complaintdel(query, sid, fromcl, tocl):
     click.echo('Successfully removed complaint.')
 
 
+@ts3cli.command()
+@sid_option
+@click.option('--cldbid', help='target client (database id)', required=True)
+@pass_query
+def complaintdelall(query, sid, cldbid):
+    '''
+    Delete all complaints for a specific client
+    '''
+    use(query, sid)
+    query.command('complaindelall', params={'tcldbid': cldbid})
+    click.echo('Successfully removed all complaints for {}.'.format(cldbid))
+
+
 if __name__ == '__main__':
     ts3cli()
