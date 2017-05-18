@@ -2,7 +2,7 @@
 from datetime import timedelta
 
 import click
-from ts3py import TS3Query
+from ts3py import TS3Query, TS3Error
 
 from .utils import (cid_option, clid_option, count_to_str, msg_option,
                     pass_query, sid_option, use)
@@ -259,6 +259,38 @@ def bandel(query, sid, banid):
     '''
     use(query, sid)
     query.command('bandel', params={'banid': banid})
+
+
+@ts3cli.command()
+@sid_option
+@click.option('--cldbid', help='target client (database id)')
+@pass_query
+def complaints(query, sid, cldbid):
+    '''
+    List complaints
+    '''
+    use(query, sid)
+    complaintlist = []
+    try:
+        complaintlist = query.command(
+            'complainlist', params={'tcldbid': cldbid} if cldbid else {}
+        )
+    except TS3Error as e:
+        if e.error_id == 1281:
+            # empty result set
+            click.echo('There are no complaints on this server.')
+            return
+        else:
+            raise e
+    click.echo('\n'.join(
+        map(
+            lambda complaint:
+                '{fname} ({fcldbid}) -> {tname} ({tcldbid}): {message}'.format(
+                    **complaint
+                ),
+            complaintlist
+        )
+    ))
 
 
 if __name__ == '__main__':
