@@ -293,5 +293,22 @@ def complaints(query, sid, cldbid):
     ))
 
 
+@ts3cli.command()
+@sid_option
+@click.option('--fromcl', help='from client (database id)', required=True)
+@click.option('--tocl', help='to client (database id)', required=True)
+@pass_query
+def complaintdel(query, sid, fromcl, tocl):
+    '''
+    Delete a complaint
+    '''
+    use(query, sid)
+    query.command('complaindel', params={
+        'fcldbid': fromcl,
+        'tcldbid': tocl
+    })
+    click.echo('Successfully removed complaint.')
+
+
 if __name__ == '__main__':
     ts3cli()
