@@ -2,7 +2,8 @@
 from datetime import timedelta
 
 import click
-from ts3py import TS3Query, TS3Error
+
+from ts3py import TS3Error, TS3Query
 
 from .utils import (cid_option, clid_option, count_to_str, msg_option,
                     pass_query, sid_option, use)
