@@ -36,15 +36,20 @@ def server(query):
     '''
     List virtual servers
     '''
+    serverlist = query.command('serverlist')
     click.echo(', '.join(map(
-        lambda vs: u'{virtualserver_name} ({virtualserver_id}) - '
-        u'{clientsonline}'.format(
-            clientsonline=count_to_str(
+        lambda vs: u'{name} ({virtualserver_id}){clientsonline}'.format(
+            name=(
+                vs['virtualserver_name']
+                if vs['virtualserver_status'] == 'online'
+                else click.style(vs['virtualserver_name'], fg='red')
+            ),
+            clientsonline=' - {} online'.format(count_to_str(
                 vs['virtualserver_clientsonline'], 'client'
-            ) + ' online',
+            )) if vs['virtualserver_status'] == 'online' else '',
             **vs
         ),
-        query.command('serverlist')
+        serverlist
     )))
 
 
