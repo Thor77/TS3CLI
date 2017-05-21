@@ -31,12 +31,20 @@ def disconnect(query, *args, **kwargs):
 
 
 @ts3cli.command()
+@click.option(
+    '--hide-offline', help='include offline servers',
+    is_flag=True, default=False
+)
 @pass_query
-def server(query):
+def server(query, hide_offline):
     '''
     List virtual servers
     '''
     serverlist = query.command('serverlist')
+    if hide_offline:
+        serverlist = filter(
+            lambda vs: vs['virtualserver_status'] == 'online', serverlist
+        )
     click.echo(', '.join(map(
         lambda vs: u'{name} ({virtualserver_id}){clientsonline}'.format(
             name=(
