@@ -218,6 +218,26 @@ def kick(query, sid, clid, reason, channel):
 @ts3cli.command()
 @sid_option
 @clid_option
+@cid_option
+@click.option('--password', help='password of the target channel')
+@pass_query
+def move(query, sid, clid, cid, password):
+    '''
+    Move a client to another channel
+    '''
+    use(query, sid)
+    params = {
+        'clid': clid,
+        'cid': cid,
+    }
+    if password:
+        params['cpw'] = password
+    query.command('clientmove', params=params)
+
+
+@ts3cli.command()
+@sid_option
+@clid_option
 @click.option(
     '--duration',
     type=int, help='ban duration in seconds (if not given permanent)'
