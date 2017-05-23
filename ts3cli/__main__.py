@@ -32,7 +32,7 @@ def disconnect(query, *args, **kwargs):
 
 @ts3cli.command()
 @click.option(
-    '--hide-offline', help='include offline servers',
+    '--hide-offline', help='hide offline servers',
     is_flag=True, default=False
 )
 @pass_query
