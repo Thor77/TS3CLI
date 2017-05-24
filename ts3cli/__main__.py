@@ -62,6 +62,26 @@ def server(query, hide_offline):
 
 
 @ts3cli.command()
+@sid_option
+@pass_query
+def serverstart(query, sid):
+    '''
+    Start a server
+    '''
+    query.command('serverstart', params={'sid': sid})
+
+
+@ts3cli.command()
+@sid_option
+@pass_query
+def serverstop(query, sid):
+    '''
+    Stop a server
+    '''
+    query.command('serverstop', params={'sid': sid})
+
+
+@ts3cli.command()
 @msg_option
 @pass_query
 def gm(query, msg):
