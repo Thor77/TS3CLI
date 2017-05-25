@@ -202,6 +202,23 @@ Parent: {parent}
 
 @ts3cli.command()
 @sid_option
+@click.option('--name', help='name of the new channel')
+@click.option('--permanent', help='make the channel permanent', is_flag=True)
+@pass_query
+def channelcreate(query, sid, name, permanent):
+    '''
+    Create a channel
+    '''
+    use(query, sid)
+    params = {'channel_name': name}
+    if permanent:
+        params['channel_flag_permanent'] = 1
+    response = query.command('channelcreate', params=params)
+    click.echo('Created "{}" ({})'.format(name, response[0]['cid']))
+
+
+@ts3cli.command()
+@sid_option
 @clid_option
 @msg_option
 @pass_query
