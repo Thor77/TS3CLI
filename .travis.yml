@@ -8,4 +8,4 @@ install:
 
 script:
   - flake8 ts3cli/*.py
-  - isort -c ts3cli/*.py
+  - isort -c -rc ts3cli/
