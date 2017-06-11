@@ -94,16 +94,20 @@ def gm(query, msg):
 @ts3cli.command()
 @sid_option
 @pass_query
-def clients(query, sid):
+@click.option('--cid', help='limit to clients in this channel', type=int)
+def clients(query, sid, cid):
     '''
     List clients on a virtual server
     '''
     use(query, sid)
+    clientlist = query.command('clientlist')
+    if cid:
+        clientlist = filter(lambda c: c['cid'] == cid, clientlist)
     click.echo(', '.join(map(
         lambda client: u'{client_nickname} ({clid})'.format(**client),
         filter(
             lambda c: c['client_type'] == 0,
-            query.command('clientlist')
+            clientlist
         )
     )))
 
