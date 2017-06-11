@@ -14,7 +14,7 @@ from .utils import (cid_option, clid_option, count_to_str, msg_option,
 @click.option(
     '--port', type=int, help='teamspeak query port', default=10011,
 )
-@click.option('--username', help='query username', required=True)
+@click.option('--username', help='query username', default='serveradmin')
 @click.option('--password', help='query password', required=True)
 @click.pass_context
 def ts3cli(ctx, host, port, username, password):
