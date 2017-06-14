@@ -2,7 +2,6 @@
 from datetime import timedelta
 
 import click
-
 from ts3py import TS3Error, TS3Query
 
 from .utils import (cid_option, clid_option, count_to_str, msg_option,
@@ -103,12 +102,11 @@ def clients(query, sid, cid):
     clientlist = query.command('clientlist')
     if cid:
         clientlist = filter(lambda c: c['cid'] == cid, clientlist)
+    else:
+        clientlist = filter(lambda c: c['client_type'] == 0, clientlist)
     click.echo(', '.join(map(
         lambda client: u'{client_nickname} ({clid})'.format(**client),
-        filter(
-            lambda c: c['client_type'] == 0,
-            clientlist
-        )
+        clientlist
     )))
 
 
