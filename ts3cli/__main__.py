@@ -94,12 +94,19 @@ def gm(query, msg):
 @sid_option
 @pass_query
 @click.option('--cid', help='limit to clients in this channel', type=int)
-def clients(query, sid, cid):
+@click.option(
+    '--near',
+    help='limit to clients in the same channel as given client', type=int
+)
+def clients(query, sid, cid, near):
     '''
     List clients on a virtual server
     '''
     use(query, sid)
     clientlist = query.command('clientlist')
+    if near:
+        # find cid of client
+        cid = query.command('clientinfo', params={'clid': near})[0]['cid']
     if cid:
         clientlist = filter(lambda c: c['cid'] == cid, clientlist)
     else:
