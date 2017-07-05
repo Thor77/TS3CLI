@@ -138,9 +138,19 @@ Version/Platform: {client_version} on {client_platform}
 IP: {connection_client_ip}
 Country: {client_country}
 Connection time: {connection_time}
-Channel (ID): {cid}'''.format(
+Channel (ID): {cid}
+Microphone/Speaker: {microphone}  {speaker}'''.format(
             clid=clid, connection_time=timedelta(
                 milliseconds=client_info['connection_connected_time']),
+            microphone=click.style(
+                '🎙', fg='green' if client_info['client_is_talker'] else None,
+                bg='red' if client_info['client_input_muted'] or
+                not client_info['client_input_hardware'] else None
+            ),
+            speaker=click.style(
+                '🔈', bg='red' if client_info['client_output_muted'] or
+                not client_info['client_output_hardware'] else None
+            ),
             **client_info
         )
     )
