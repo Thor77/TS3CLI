@@ -98,19 +98,20 @@ def gm(query, msg):
     '--near',
     help='limit to clients in the same channel as given client', type=int
 )
-def clients(query, sid, cid, near):
+@click.option('--show-query', help='show query clients', is_flag=True)
+def clients(query, sid, cid, near, show_query):
     '''
     List clients on a virtual server
     '''
     use(query, sid)
     clientlist = query.command('clientlist')
+    if not show_query:
+        clientlist = filter(lambda c: c['client_type'] == 0, clientlist)
     if near:
         # find cid of client
         cid = query.command('clientinfo', params={'clid': near})[0]['cid']
     if cid:
         clientlist = filter(lambda c: c['cid'] == cid, clientlist)
-    else:
-        clientlist = filter(lambda c: c['client_type'] == 0, clientlist)
     click.echo(', '.join(map(
         lambda client: u'{client_nickname} ({clid})'.format(**client),
         clientlist
