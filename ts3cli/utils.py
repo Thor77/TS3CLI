@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import click
 
 from ts3py import TS3Query
