@@ -199,8 +199,7 @@ Type: {type}
 Max clients: {maxclients}
 Filepath: {channel_filepath}
 Icon: {channel_icon_id}
-Parent: {parent}
-'''.format(
+Parent: {parent}'''.format(
             password='yes' if channel_info['channel_password'] else 'no',
             maxclients=(
                 '∞' if channel_info['channel_maxclients'] == -1
