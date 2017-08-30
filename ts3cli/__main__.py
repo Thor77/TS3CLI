@@ -81,6 +81,31 @@ def serverstop(query, sid):
 
 
 @ts3cli.command()
+@click.option('--name', help='virtual server name')
+@pass_query
+def servercreate(query, name):
+    '''
+    Create a new virtual server
+    '''
+    response = query.command(
+        'servercreate', params={'virtualserver_name': name}
+    )
+    click.echo('''SID: { sid }
+    Port: { virtualserver_port }
+    Admin token: { token }'''.format(**response))
+
+
+@ts3cli.command()
+@sid_option
+@pass_query
+def serverdelete(query, sid):
+    '''
+    Delete a virtual server
+    '''
+    query.command('serverdelete', params={'sid': sid})
+
+
+@ts3cli.command()
 @msg_option
 @pass_query
 def gm(query, msg):
