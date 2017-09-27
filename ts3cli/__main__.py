@@ -8,13 +8,26 @@ from .utils import (cid_option, clid_option, count_to_str, msg_option,
                     pass_query, sid_option, use)
 
 
+envvar_prefix = 'TS3CLI_'
+
+
 @click.group()
-@click.option('--host', help='teamspeak query host', default='localhost')
+@click.option(
+    '--host', help='teamspeak query host', default='localhost',
+    envvar=envvar_prefix + 'HOST'
+)
 @click.option(
     '--port', type=int, help='teamspeak query port', default=10011,
+    envvar=envvar_prefix + 'PORT'
 )
-@click.option('--username', help='query username', default='serveradmin')
-@click.option('--password', help='query password', required=True)
+@click.option(
+    '--username', help='query username', default='serveradmin',
+    envvar=envvar_prefix + 'USERNAME'
+)
+@click.option(
+    '--password', help='query password', required=True,
+    envvar=envvar_prefix + 'PASSWORD'
+)
 @click.pass_context
 def ts3cli(ctx, host, port, username, password):
     query = TS3Query(host, port)
