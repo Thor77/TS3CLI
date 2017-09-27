@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import click
-
 from ts3py import TS3Query
 
 pass_query = click.make_pass_decorator(TS3Query)
