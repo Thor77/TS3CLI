@@ -148,11 +148,20 @@ def clients(query, sid, cid, near, show_query):
         # find cid of client
         cid = query.command('clientinfo', params={'clid': near})[0]['cid']
     if cid:
+        # obtain channel information
+        channelinfo = query.command('channelinfo', params={'cid': cid})[0]
+        channel_formatted = '{channel_name} ({cid})'.format(
+            **channelinfo, cid=cid
+        )
+        click.echo(channel_formatted)
+
+        # build clientlist
         clientlist = filter(lambda c: c['cid'] == cid, clientlist)
-    click.echo(', '.join(map(
+    clientlist_formatted = map(
         lambda client: u'{client_nickname} ({clid})'.format(**client),
         clientlist
-    )))
+    )
+    click.echo(', '.join(clientlist_formatted))
 
 
 @ts3cli.command()
