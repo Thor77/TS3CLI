@@ -136,7 +136,10 @@ def gm(query, msg):
     help='limit to clients in the same channel as given client', type=int
 )
 @click.option('--show-query', help='show query clients', is_flag=True)
-def clients(query, sid, cid, near, show_query):
+@click.option(
+    '--oneline', help='Format output as one line', is_flag=True, default=False
+)
+def clients(query, sid, cid, near, show_query, oneline):
     '''
     List clients on a virtual server
     '''
@@ -153,7 +156,6 @@ def clients(query, sid, cid, near, show_query):
         channel_formatted = '{channel_name} ({cid})'.format(
             **channelinfo, cid=cid
         )
-        click.echo(channel_formatted)
 
         # build clientlist
         clientlist = filter(lambda c: c['cid'] == cid, clientlist)
@@ -161,7 +163,16 @@ def clients(query, sid, cid, near, show_query):
         lambda client: u'{client_nickname} ({clid})'.format(**client),
         clientlist
     )
-    click.echo(', '.join(clientlist_formatted))
+    if oneline:
+        output = ', '.join(clientlist_formatted)
+        if cid:
+            output = channel_formatted + ': ' + output
+        click.echo(output)
+    else:
+        if cid:
+            click.echo(channel_formatted)
+        for client_formatted in clientlist_formatted:
+            click.echo('↳ ' + client_formatted)
 
 
 @ts3cli.command()
