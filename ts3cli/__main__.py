@@ -226,7 +226,8 @@ def channelinfo(query, sid, cid):
         'channelinfo', params={'cid': cid})[0]
     parent = query.command(
         'channelinfo', params={'cid': channel_info['pid']}
-    )[0]['channel_name'] if 'pid' in channel_info else None
+    )[0]['channel_name'] if 'pid' in channel_info \
+        and channel_info['pid'] != 0 else None
     click.echo(
         u'''Name: {channel_name}
 Topic: {channel_topic}
