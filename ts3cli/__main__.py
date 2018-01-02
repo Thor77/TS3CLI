@@ -154,7 +154,7 @@ def clients(query, sid, cid, near, show_query, oneline):
         # obtain channel information
         channelinfo = query.command('channelinfo', params={'cid': cid})[0]
         channel_formatted = '{channel_name} ({cid})'.format(
-            **channelinfo, cid=cid
+            cid=cid, **channelinfo
         )
 
         # build clientlist
