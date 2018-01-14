@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='ts3cli',
-    version='0.9.0',
+    version='0.10.0',
     author='Thor77',
     author_email='thor77@thor77.org',
     description='CLI for Teamspeak 3\'s query interface',
