@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
-from datetime import timedelta
-
 import click
+import pendulum
 from ts3py import TS3Error, TS3Query
 
 from .utils import (cid_option, clid_option, count_to_str, msg_option,
                     pass_query, sid_option, use)
-
-import pendulum
 
 envvar_prefix = 'TS3CLI_'
 
