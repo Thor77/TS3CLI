@@ -198,6 +198,7 @@ Version/Platform: {client_version} on {client_platform}
 IP: {connection_client_ip}
 Country: {client_country}
 Connection time: {connection_time}
+Idle time: {idle_time}
 Channel (ID): {cid}
 Microphone/Speaker: {microphone}  {speaker}'''.format(
             clid=clid,
@@ -213,6 +214,9 @@ Microphone/Speaker: {microphone}  {speaker}'''.format(
                 '🔈', bg='red' if client_info['client_output_muted'] or
                 not client_info['client_output_hardware'] else None
             ),
+            idle_time=pendulum.now().subtract(
+                seconds=client_info['client_idle_time'] / 1000
+            ).diff_for_humans(absolute=True),
             **client_info
         )
     )
