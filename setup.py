@@ -13,6 +13,7 @@ setup(
     install_requires=[
         'Click',
         'TS3Py'
+        'pendulum'
     ],
     entry_points='''
         [console_scripts]

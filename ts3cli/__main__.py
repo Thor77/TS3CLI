@@ -7,6 +7,8 @@ from ts3py import TS3Error, TS3Query
 from .utils import (cid_option, clid_option, count_to_str, msg_option,
                     pass_query, sid_option, use)
 
+import pendulum
+
 envvar_prefix = 'TS3CLI_'
 
 
@@ -198,8 +200,10 @@ Country: {client_country}
 Connection time: {connection_time}
 Channel (ID): {cid}
 Microphone/Speaker: {microphone}  {speaker}'''.format(
-            clid=clid, connection_time=timedelta(
-                milliseconds=client_info['connection_connected_time']),
+            clid=clid,
+            connection_time=pendulum.now().subtract(
+                seconds=client_info['connection_connected_time'] / 1000
+            ).diff_for_humans(absolute=True),
             microphone=click.style(
                 '🎙', fg='green' if client_info['client_is_talker'] else None,
                 bg='red' if client_info['client_input_muted'] or
