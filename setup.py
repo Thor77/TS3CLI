@@ -12,7 +12,7 @@ setup(
     packages=['ts3cli'],
     install_requires=[
         'Click',
-        'TS3Py'
+        'TS3Py',
         'pendulum'
     ],
     entry_points='''
